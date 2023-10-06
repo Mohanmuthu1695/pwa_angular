@@ -1,0 +1,74 @@
+<div class="container">
+    <h2 class="text-center">Image Upload</h2>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-4">
+       
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" class="form-control" formControlName="description" required>
+            <div class="invalid-feedback" *ngIf="form.controls['description'].invalid">Description is required</div>
+          </div>
+      
+          <div class="form-group">
+            <label for="image">Choose Image</label>
+            <div class="custom-file">
+              <input type="file" (change)="onFileChange($event)" accept=".jpg, .png" class="custom-file-input" id="image">
+              <label class="custom-file-label" for="image">Select file</label>
+            </div>
+            <small class="form-text text-muted" *ngIf="selectedFile">Selected file: {{ selectedFile.name }}</small>
+          </div>
+      
+  
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+    <div class="text-center mt-3">
+        <div [ngClass]="{'text-success': isOnline, 'text-danger': !isOnline}">
+          {{ isOnline ? 'Online' : 'Offline' }}
+          <span *ngIf="isOnline" class="heartbeat-animation">●</span>
+        </div>
+      </div>
+      
+   
+<div class="mt-4" *ngIf="uploadedImages.length > 0">
+    <h3 class="text-center">Uploaded Images</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Image Preview</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let image of uploadedImages">
+          <td>{{ image.description }}</td>
+          <td>
+            <!-- Set the src attribute to the image URL -->
+            <img [src]="image.imageUrl" alt="Image Preview" class="img-thumbnail" (click)="onImageClick(image.imageUrl)">
+          </td>
+          
+          <td>{{ image.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  </div>
+  <!-- Modal dialog to display the actual-size image -->
+<div class="modal" [ngClass]="{ 'show': selectedImageUrl }">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Actual-Size Image</h5>
+          <button type="button" class="close" (click)="selectedImageUrl = null">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Display the selected image in actual size -->
+          <img [src]="selectedImageUrl" alt="Actual-Size Image">
+        </div>
+      </div>
+    </div>
+  </div>
